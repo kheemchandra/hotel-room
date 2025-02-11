@@ -292,7 +292,7 @@ const App = () => {
           value={numberOfRooms}
           onChange={(e) => setNumberOfRooms(e.target.value)}
           placeholder="Rooms"
-          className="border p-2 rounded"
+          className="border p-2 rounded w-24"
         />
         <button
           onClick={handleBook}
