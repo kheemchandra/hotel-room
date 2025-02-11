@@ -30,10 +30,12 @@ const App = () => {
   const [rooms, setRooms] = useState(initializeHotelState());
   const [numberOfRooms, setNumberOfRooms] = useState("");
   const [recentlyBookedRooms, setRecentlyBookedRooms] = useState([]);
+  const [showTravelTime, setShowTravelTime] = useState(false);
 
   // Reset highlight effect after delay
   useEffect(() => {
     if (recentlyBookedRooms.length > 0) {
+      setShowTravelTime(true);
       const timer = setTimeout(() => {
         setRooms((prevRooms) => {
           const newRooms = { ...prevRooms };
@@ -43,6 +45,7 @@ const App = () => {
           return newRooms;
         });
         setRecentlyBookedRooms([]);
+        setShowTravelTime(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -175,6 +178,12 @@ const App = () => {
         >
           Random
         </button>
+        {/* Travel Time Message */}
+        {showTravelTime && (
+          <div className="ml-4 text-green-500 font-bold">
+            Total travel time = 5 minutes
+          </div>
+        )}
       </div>
 
       {/* Hotel Grid - Updated Layout */}
