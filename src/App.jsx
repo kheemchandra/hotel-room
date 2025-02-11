@@ -154,7 +154,7 @@ const App = () => {
           max="5"
           value={numberOfRooms}
           onChange={(e) => setNumberOfRooms(e.target.value)}
-          placeholder="No of Rooms"
+          placeholder="Rooms"
           className="border p-2 rounded"
         />
         <button
@@ -177,37 +177,55 @@ const App = () => {
         </button>
       </div>
 
-      {/* Hotel Grid */}
-      <div className="grid grid-cols-10 gap-2">
-        {/* Elevator/Stairs indicator */}
-        <div className="col-span-1 row-span-10 bg-gray-300 flex items-center justify-center">
-          Elevator/Stairs
-        </div>
-
-        {/* Room grid */}
-        {Array.from({ length: 10 }, (_, floor) => (
-          <React.Fragment key={floor}>
-            {Array.from({ length: floor === 9 ? 7 : 10 }, (_, room) => {
-              const roomNumber =
-                floor < 9 ? (floor + 1) * 100 + (room + 1) : 1000 + (room + 1);
-              const roomData = rooms[roomNumber];
-
-              return (
+      {/* Hotel Grid - Updated Layout */}
+      <div className="grid grid-cols-11 gap-2">
+        {Array.from({ length: 10 }, (_, floor) => {
+          const currentFloor = 10 - floor;
+          return (
+            <React.Fragment key={currentFloor}>
+              {/* Elevator vertical strip */}
+              {floor === 0 ? (
                 <div
-                  key={roomNumber}
-                  className={`
-                    ${getRoomColor(roomData.status)}
-                    p-2 text-center border rounded
-                    transition-colors duration-300
-                    ${floor === 9 && room >= 7 ? "hidden" : ""}
-                  `}
+                  className="bg-gray-300 row-span-10 flex items-center justify-center p-2 text-sm"
+                  style={{ gridRow: "1 / span 10" }}
                 >
-                  {roomNumber}
+                  <div className="rotate-270 whitespace-nowrap">
+                    Elevator & Stairs
+                  </div>
                 </div>
-              );
-            })}
-          </React.Fragment>
-        ))}
+              ) : null}
+
+              {/* Rooms for current floor */}
+              {Array.from(
+                { length: currentFloor === 10 ? 7 : 10 },
+                (_, room) => {
+                  const roomNumber = currentFloor * 100 + (room + 1);
+                  const roomData = rooms[roomNumber];
+
+                  return (
+                    <div
+                      key={roomNumber}
+                      className={`
+                      ${getRoomColor(roomData.status)}
+                      p-2 text-center border rounded
+                      transition-colors duration-300
+                      hover:opacity-80
+                    `}
+                    >
+                      {roomNumber}
+                    </div>
+                  );
+                }
+              )}
+
+              {/* Add empty cells for top floor to maintain grid */}
+              {currentFloor === 10 &&
+                Array.from({ length: 3 }, (_, i) => (
+                  <div key={`empty-${i}`} className="invisible"></div>
+                ))}
+            </React.Fragment>
+          );
+        })}
       </div>
     </div>
   );
